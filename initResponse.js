@@ -4,7 +4,7 @@ var path = require('path')
 
 module.exports = function (req, res, next) {
 
-    if (!res.payload) {
+    if (res && !res.payload) {
         res.payload = {
             success: false,
             error: null, // Object for capturing specific request error
