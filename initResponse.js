@@ -32,5 +32,6 @@ module.exports = function (req, res, next) {
         }
     }
 
-    next();
+    if (typeof next === 'function')
+        next();
 };
