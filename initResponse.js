@@ -1,6 +1,5 @@
 var path = require('path')
-    , libs = path.join(process.cwd(), 'libs')
-    , endpoint = require(path.join(libs, 'utils', 'endpoint'))
+    , endpoint = require('./endpoint')
     ;
 
 module.exports = function (req, res, next) {
