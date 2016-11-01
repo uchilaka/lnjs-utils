@@ -1,6 +1,7 @@
 function buildEndpoint() {
     console.log('Port -> ', process.env.PORT, '; App Endpoint -> ', process.env.APP_ENDPOINT);
     if (
+        // Test for ALL production port numbers and remove the port from the Base URL for online instances
         [80, 443, 3031].indexOf(process.env.PORT) > -1
         || /^(80|443|3031)$/.test(process.env.PORT)
         || /^https\:\/\//.test(process.env.APP_ENDPOINT)
