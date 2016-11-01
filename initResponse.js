@@ -3,27 +3,34 @@ var path = require('path')
     ;
 
 module.exports = function (req, res, next) {
-    if (/^\/api\//.test(req.originalUrl)) {
-        if (!Array.isArray(res.errors))
-            res.errors = {
-                log: []
-            };
-        // prepare payload
-        if (typeof req.payload !== 'object') {
-            res.payload = {
-                errors: res.errors,
-                // prepare userinfo if available 
-                person: req.user ? req.user : null
-            };
-            console.log('Init payload for: ', req.originalUrl);
-        }
-    } else if (!/^\/(stylesheets|javascripts|bower)\/?/.test(req.originalUrl)) {
-        console.log('Matched authenticated view -> ', req.originalUrl);
+
+    if (!res.payload) {
         res.payload = {
-            baseURL: endpoint.getURL(),
-            person: req.user,
-            credentials: (req.cookies && req.user) ? req.cookies.oauth : {}
-        };
+            success: false,
+            error: null, // Object for capturing specific request error
+            errors: {
+                log: []
+            }, // Object for capturing form errors to be returned in the response
+        }
+        if (/^\/api\//.test(req.originalUrl)) {
+            console.log('Init payload for: ', req.originalUrl);
+            if (!Array.isArray(res.errors))
+                res.errors = {
+                    log: []
+                };
+            // prepare payload
+            if (req.user) {
+                res.payload.person = req.user;
+            }
+        } else if (!/^\/(stylesheets|javascripts|bower)\/?/.test(req.originalUrl)) {
+            console.log('Matched authenticated view -> ', req.originalUrl);
+            res.payload = {
+                baseURL: endpoint.getURL(),
+                person: req.user,
+                credentials: (req.cookies && req.user) ? req.cookies.oauth : {}
+            };
+        }
     }
+
     next();
 };
